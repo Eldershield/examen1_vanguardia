@@ -66,9 +66,7 @@ export default {
 
       
       emit('add-product', { ...product.value });
-
       
-      alert('Producto almacenado correctamente');
       
       
       resetForm();
