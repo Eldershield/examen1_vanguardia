@@ -15,14 +15,30 @@
       <tbody>
         <tr v-for="product in products" :key="product.id" class="border-t">
           <td class="py-2 px-4 border">{{ product.id }}</td>
-          <td class="py-2 px-4 border">{{ product.name }}</td>
-          <td class="py-2 px-4 border">{{ product.stock }}</td>
-          <td class="py-2 px-4 border">${{ product.price }}</td>
-          <td class="py-2 px-4 border">{{ product.expiryDate }}</td>
+          <td class="py-2 px-4 border">
+            <input v-if="editingProduct?.id === product.id" v-model="editingProduct.name" class="border px-2 py-1 w-full" />
+            <span v-else>{{ product.name }}</span>
+          </td>
+          <td class="py-2 px-4 border">
+            <input v-if="editingProduct?.id === product.id" v-model="editingProduct.stock" type="number" class="border px-2 py-1 w-full" />
+            <span v-else>{{ product.stock }}</span>
+          </td>
+          <td class="py-2 px-4 border">
+            <input v-if="editingProduct?.id === product.id" v-model="editingProduct.price" type="number" class="border px-2 py-1 w-full" />
+            <span v-else>${{ product.price }}</span>
+          </td>
+          <td class="py-2 px-4 border">
+            <input v-if="editingProduct?.id === product.id" v-model="editingProduct.expiryDate" type="date" class="border px-2 py-1 w-full" />
+            <span v-else>{{ product.expiryDate }}</span>
+          </td>
           <td class="py-2 px-4 border">{{ product.creationDate }}</td>
-          <td class="py-2 px-4 border">{{ product.supplier }}</td>
+          <td class="py-2 px-4 border">
+            <input v-if="editingProduct?.id === product.id" v-model="editingProduct.supplier" class="border px-2 py-1 w-full" />
+            <span v-else>{{ product.supplier }}</span>
+          </td>
           <td class="py-2 px-4 border flex gap-2">
-            <button @click="$emit('edit-product', product)" class="bg-blue-500 text-white px-2 py-1 rounded">Editar</button>
+            <button v-if="editingProduct?.id === product.id" @click="saveEdit" class="bg-green-500 text-white px-2 py-1 rounded">Guardar</button>
+            <button v-else @click="startEditing(product)" class="bg-blue-500 text-white px-2 py-1 rounded">Editar</button>
             <button @click="$emit('delete-product', product.id)" class="bg-red-500 text-white px-2 py-1 rounded">Eliminar</button>
           </td>
         </tr>
@@ -35,6 +51,22 @@
     props: {
       products: Array,
     },
-  }
+    data() {
+      return {
+        editingProduct: null,
+      };
+    },
+    methods: {
+      startEditing(product) {
+        this.editingProduct = { ...product };
+      },
+      saveEdit() {
+        this.$emit('update-product', this.editingProduct);
+        this.editingProduct = null;
+        alert('rpodcuto actulizado correctamente!');
+      },
+    },
+  };
   </script>
+  
   
